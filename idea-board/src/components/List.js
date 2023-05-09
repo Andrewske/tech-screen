@@ -1,45 +1,51 @@
 import React, { useState, useEffect } from "react";
 import ListItem from "./ListItem";
 import { v4 as uuidv4 } from "uuid";
-import usePersistState from "../hooks/usePersistState";
+import handleKeyUp from "../utils/handleKeyUp";
+import moment from "moment";
+import ListMenu from "./ListMenu";
 
-const initialState = {
-  title: "New List",
-  items: [],
+const initialItemState = {
+  id: null,
+  title: "New Task",
+  description: "",
+  createdAt: moment(),
+  updatedAt: moment(),
 };
 
-const List = ({ state, setState }) => {
-  const [itemText, setItemText] = useState("");
-  const [itemTextLength, setItemTextLength] = useState(0);
+const List = ({ state, setState, deleteList }) => {
+  const [item, setItem] = useState(initialItemState);
 
   const handleTitleChange = (e) => {
     setState({ ...state, title: e.target.value });
   };
 
-  const handleTextAreaChange = (e) => {
-    if (e.target.value.length <= 140) {
-      setItemTextLength(e.target.value.length);
-      setItemText(e.target.value);
+  const handleChange = (e) => {
+    if (e.target.id === "new-item-description") {
+      if (e.target.value.length <= 140) {
+        setItem({
+          ...item,
+          description: e.target.value,
+        });
+      }
+    } else if (e.target.id === "new-item-title") {
+      setItem({
+        ...item,
+        title: e.target.value,
+      });
     }
   };
 
   const createItem = (e) => {
     e.preventDefault();
-
-    const item = {
-      id: uuidv4(),
-      text: itemText,
-    };
-
-    setState({ ...state, items: [...state.items, item] });
-    setItemText("");
-    setItemTextLength(0);
+    setState({ ...state, items: [...state.items, { ...item, id: uuidv4() }] });
+    setItem(initialItemState);
   };
 
-  const editItem = (data) => {
+  const editItem = ({ id, title, description }) => {
     let updatedItems = state.items.map((item) => {
-      if ((item.id = data.id)) {
-        return { ...item, text: data.text };
+      if (item.id === id) {
+        return { ...item, title, description, updatedAt: moment() };
       }
       return item;
     });
@@ -48,19 +54,54 @@ const List = ({ state, setState }) => {
 
   const deleteItem = (id) => {
     setState({ ...state, items: state.items.filter((item) => item.id !== id) });
-    // setItems(items.filter((item) => item.id !== id));
   };
 
-  useEffect(() => console.log(state.items), [state]);
+  const sortItems = (type, dir) => {
+    let items = state.items;
+    if (items.length < 2) return;
+
+    let sortedItems;
+
+    switch (type) {
+      case "title":
+        if (dir === "asc") {
+          sortedItems = items.sort((a, b) => (a.title > b.title ? 1 : -1));
+          break;
+        } else {
+          sortedItems = items.sort((a, b) => (a.title > b.title ? -1 : 1));
+          break;
+        }
+      case "date":
+        if (dir === "asc") {
+          sortedItems = items.sort((a, b) =>
+            a.createdAt > b.createdAt ? -1 : 1
+          );
+          break;
+        } else {
+          sortedItems = items.sort((a, b) =>
+            a.createdAt > b.createdAt ? 1 : -1
+          );
+          break;
+        }
+      default:
+        console.log(type, dir);
+    }
+
+    return setState({ ...state, items: sortedItems });
+  };
 
   return (
     <div className="list-container">
-      <input
-        className="list-title"
-        type="text"
-        value={state.title}
-        onChange={handleTitleChange}
-      />
+      <span className="list-header">
+        <input
+          className="list-title"
+          type="text"
+          value={state.title}
+          onChange={handleTitleChange}
+          onKeyUp={handleKeyUp}
+        />
+        <ListMenu sort={sortItems} />
+      </span>
 
       <div className="list-items">
         {state.items.length > 0
@@ -76,16 +117,30 @@ const List = ({ state, setState }) => {
       </div>
 
       <div className="list-add-item">
+        <div>
+          <input
+            id="new-item-title"
+            className="edit-item-title"
+            value={item.title}
+            onChange={handleChange}
+            onKeyUp={handleKeyUp}
+          />
+        </div>
         <textarea
+          id="new-item-description"
           className="list-item-text-area"
-          value={itemText}
-          onChange={handleTextAreaChange}
+          value={item.description}
+          onChange={handleChange}
+          onKeyUp={handleKeyUp}
         />
         <span className="list-add-item-footer">
-          <button className="add-item-btn" onClick={createItem}>
-            Add Item
-          </button>
-          <p className="char-length">{itemTextLength}</p>
+          <img
+            className="icon"
+            src="/icons/icons8-add-50-dark-blue.png"
+            alt="delete"
+            onClick={createItem}
+          />
+          <p className="char-length">{item.description.length}</p>
         </span>
       </div>
     </div>
