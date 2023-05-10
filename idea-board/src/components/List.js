@@ -77,7 +77,10 @@ const List = ({ state, setState, deleteList, isFocused }) => {
           onChange={handleTitleChange}
           onKeyUp={handleKeyUp}
         />
-        <ListMenu sort={sortItems} deleteList={() => deleteList(state.id)} />
+        <ListMenu
+          sortList={sortItems}
+          deleteList={() => deleteList(state.id)}
+        />
       </span>
 
       <div className="list-items">
