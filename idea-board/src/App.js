@@ -2,12 +2,14 @@ import React, { useEffect } from "react";
 import "./App.css";
 import { v4 as uuidv4 } from "uuid";
 import usePersistState from "./hooks/usePersistState";
+import useWindowSize from "./hooks/useWindowSize";
 
 // List
 import List from "./components/List";
 
 const App = () => {
   const [state, setState] = usePersistState("lists", []);
+  const { width, height } = useWindowSize();
 
   const createList = () => {
     setState([...state, { id: uuidv4(), title: "new title", items: [] }]);
@@ -31,10 +33,6 @@ const App = () => {
   const scrollRight = () =>
     (document.getElementById("board").scrollLeft += 300);
 
-  useEffect(() => {
-    console.log(state);
-  }, [state]);
-
   return (
     <main>
       <header className="header">
@@ -46,35 +44,40 @@ const App = () => {
         />
       </header>
       <div className="main-container">
-        <div className="icon-btn">
-          <img
-            className="icon"
-            src="/icons/icons8-add-50.png"
-            alt="delete"
-            onClick={scrollLeft}
-          />
-        </div>
+        {width > 400 && (
+          <div className="icon-btn">
+            <img
+              className="icon"
+              src="/icons/icons8-add-50.png"
+              alt="delete"
+              onClick={scrollLeft}
+            />
+          </div>
+        )}
 
         <div id="board" className="board">
           {state.length > 0
-            ? state.map((list) => (
+            ? state.map((list, i) => (
                 <List
                   key={list.id}
                   state={list}
                   setState={updateList}
                   deleteList={deleteList}
+                  isFocused={i === 0 ? true : false}
                 />
               ))
             : null}
         </div>
-        <div className="icon-btn">
-          <img
-            className="icon"
-            src="/icons/icons8-add-50.png"
-            alt="delete"
-            onClick={scrollRight}
-          />
-        </div>
+        {width > 400 && (
+          <div className="icon-btn">
+            <img
+              className="icon"
+              src="/icons/icons8-add-50.png"
+              alt="delete"
+              onClick={scrollRight}
+            />
+          </div>
+        )}
       </div>
     </main>
   );

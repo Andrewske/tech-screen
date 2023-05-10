@@ -13,8 +13,15 @@ const initialItemState = {
   updatedAt: moment(),
 };
 
-const List = ({ state, setState, deleteList }) => {
+const List = ({ state, setState, deleteList, isFocused }) => {
   const [item, setItem] = useState(initialItemState);
+
+  useEffect(() => {
+    if (isFocused) {
+      let input = document.getElementById("new-item-title");
+      input.focus();
+    }
+  });
 
   const handleTitleChange = (e) => {
     setState({ ...state, title: e.target.value });
