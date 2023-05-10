@@ -21,7 +21,7 @@ const List = ({ state, setState, deleteList, isFocused }) => {
       let input = document.getElementById("new-item-title");
       input.focus();
     }
-  });
+  }, []);
 
   const handleTitleChange = (e) => {
     setState({ ...state, title: e.target.value });

@@ -48,7 +48,7 @@ const App = () => {
           <div className="icon-btn">
             <img
               className="icon"
-              src="/icons/icons8-add-50.png"
+              src="/icons/icons8-back-arrow-50.png"
               alt="delete"
               onClick={scrollLeft}
             />
@@ -69,10 +69,10 @@ const App = () => {
             : null}
         </div>
         {width > 400 && (
-          <div className="icon-btn">
+          <div className="icon-btn right">
             <img
               className="icon"
-              src="/icons/icons8-add-50.png"
+              src="/icons/icons8-circled-right-50.png"
               alt="delete"
               onClick={scrollRight}
             />
