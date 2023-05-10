@@ -64,37 +64,13 @@ const List = ({ state, setState, deleteList, isFocused }) => {
   };
 
   const sortItems = (type, dir) => {
-    let items = state.items;
-    if (items.length < 2) return;
+    if (state.items.length > 1) {
+      let [x, y] = dir === "asc" ? [1, -1] : [-1, 1];
 
-    let sortedItems;
+      let sortedItems = state.items.sort((a, b) => (a[type] > b[type] ? x : y));
 
-    switch (type) {
-      case "title":
-        if (dir === "asc") {
-          sortedItems = items.sort((a, b) => (a.title > b.title ? 1 : -1));
-          break;
-        } else {
-          sortedItems = items.sort((a, b) => (a.title > b.title ? -1 : 1));
-          break;
-        }
-      case "date":
-        if (dir === "asc") {
-          sortedItems = items.sort((a, b) =>
-            a.createdAt > b.createdAt ? -1 : 1
-          );
-          break;
-        } else {
-          sortedItems = items.sort((a, b) =>
-            a.createdAt > b.createdAt ? 1 : -1
-          );
-          break;
-        }
-      default:
-        console.log(type, dir);
+      return setState({ ...state, items: sortedItems });
     }
-
-    return setState({ ...state, items: sortedItems });
   };
 
   return (
