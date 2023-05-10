@@ -1,6 +1,14 @@
-import React, { useEffect, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 
 const useScroll = () => {
+  const scrollLeft = useCallback(
+    () => (document.getElementById("board").scrollLeft -= 300),
+    []
+  );
+  const scrollRight = useCallback(
+    () => (document.getElementById("board").scrollLeft += 300)
+  );
+
   useEffect(() => {
     const handleKeyPress = (e) => {
       if (e.keyCode === 37) scrollLeft();
@@ -10,14 +18,6 @@ const useScroll = () => {
 
     return () => window.removeEventListener("keypress", handleKeyPress);
   }, [scrollLeft, scrollRight]);
-
-  const scrollLeft = useCallback(
-    () => (document.getElementById("board").scrollLeft -= 300),
-    []
-  );
-  const scrollRight = useCallback(
-    () => (document.getElementById("board").scrollLeft += 300)
-  );
 
   return { scrollLeft, scrollRight };
 };
