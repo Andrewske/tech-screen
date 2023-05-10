@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 
-const ListMenu = ({ sort }) => {
+const ListMenu = ({ sortList, deleteList }) => {
   const [dateAsc, setDateAsc] = useState(false);
 
   const handleDateClick = () => {
     setDateAsc(!dateAsc);
-    sort("createdAt", "asc");
+    sortList("createdAt", "asc");
   };
 
   return (
@@ -31,14 +31,14 @@ const ListMenu = ({ sort }) => {
             />
           )}
         </span>
-        <span className="menu-item" onClick={() => sort("title", "asc")}>
+        <span className="menu-item" onClick={() => sortList("title", "asc")}>
           <img
             className="menu-item-icon"
             src="/icons/icons8-alphabetical-sorting-50.png"
             alt="menu"
           />
         </span>
-        <span className="menu-item" onClick={() => sort("title", "desc")}>
+        <span className="menu-item" onClick={() => sortList("title", "desc")}>
           <img
             className="menu-item-icon"
             src="/icons/icons8-alphabetical-sorting-2-50.png"
@@ -50,6 +50,7 @@ const ListMenu = ({ sort }) => {
             className="menu-item-icon"
             src="/icons/icons8-delete-30.png"
             alt="delete"
+            onClick={deleteList}
           />
         </span>
       </span>

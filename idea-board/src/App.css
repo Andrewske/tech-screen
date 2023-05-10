@@ -9,6 +9,20 @@
   box-sizing: border-box;
 }
 
+button,
+input[type="submit"],
+input[type="reset"] {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
 main {
   background: var(--dark-bg);
   color: --var(--white);
@@ -20,6 +34,23 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+@media (min-width: 400px) {
+  .board {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+  }
+}
+
+.bg-white {
+  background: white;
+  color: var(--dark-bg);
+}
+
+.bg-blue {
+  background: var(--dark-bg);
+  color: var(--white);
 }
 
 .header {
@@ -192,12 +223,18 @@ input {
   .edit-item-title {
     flex: 2;
     width: 100%;
-    text-align: center;
+    margin: auto;
+    text-align-last: center;
     border: none;
     border-radius: 0;
     border-bottom: solid 1px var(--lighter-bg) !important;
     background: inherit;
     color: inherit;
+    padding: 0.5rem;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
   .list-items {
@@ -211,18 +248,21 @@ input {
       width: 100%;
       background: var(--dark-bg);
       color: white;
-      padding: 0.5rem;
+      padding: 0 0.5rem;
       box-sizing: border-box;
       border-radius: 0.5rem;
       display: flex;
+      gap: 0.5rem;
       flex-direction: column;
+      word-wrap: break-word;
+      hyphens: auto;
 
       .edit-item-text-area {
-        flex: 1;
-        width: 100%;
-        padding: 0.5rem 0.5rem 1.5rem 0.5rem;
+        border-radius: 0.25rem;
+        padding: 0.5rem;
         border: none;
-        box-sizing: border-box;
+        resize: none;
+        width: 100%;
 
         &::-webkit-scrollbar {
           display: none;
@@ -232,6 +272,8 @@ input {
       .list-item-footer {
         display: flex;
         justify-content: flex-end;
+        align-items: center;
+        min-height: 2rem;
         gap: 0.25rem;
       }
 
@@ -248,13 +290,12 @@ input {
     background-color: white;
     display: flex;
     flex-direction: column;
-    border-radius: 1rem;
+    border-radius: 0.5rem;
     padding: 0.5rem;
     box-sizing: border-box;
     margin-top: 0.5rem;
 
     .list-item-text-area {
-      flex: 1;
       width: 100%;
       padding: 0.5rem 0.5rem 1.5rem 0.5rem;
       border: none;
@@ -268,15 +309,13 @@ input {
     .list-add-item-footer {
       display: flex;
       justify-content: space-between;
+      align-items: center;
 
       .char-length {
         font-size: 0.75rem;
         color: var(--dark-bg);
         margin: 0;
         text-align: right;
-      }
-
-      .add-item-button {
       }
     }
   }

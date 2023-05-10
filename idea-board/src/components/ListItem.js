@@ -1,42 +1,31 @@
 import React, { useState } from "react";
-import handleKeyUp from "../utils/handleKeyUp";
 import moment from "moment";
 
+import ResizeTextArea from "./ResizeTextArea";
+
 const ListItem = ({ data, editItem, deleteItem }) => {
-  const [openEdit, setOpenEdit] = useState(false);
   const [openTime, setOpenTime] = useState(false);
 
-  const handleChange = (e) => {
-    if (e.target.id === "title") {
-      editItem({ ...data, title: e.target.value });
-    } else if (e.target.id === "description") {
-      editItem({ ...data, description: e.target.value });
-    }
+  const handleChange = (id, text) => {
+    editItem({ ...data, [id]: text });
   };
 
   return (
     <div className="list-item" id={data.id}>
-      <div>
-        <input
-          id="title"
-          className="edit-item-title"
-          value={data.title}
-          onChange={handleChange}
-          onKeyUp={handleKeyUp}
-        />
-      </div>
-      {openEdit ? (
-        <div>
-          <textarea
-            id="description"
-            className="edit-item-text-area"
-            value={data.description}
-            onChange={handleChange}
-          />
-        </div>
-      ) : (
-        data.description
-      )}
+      <ResizeTextArea
+        id="title"
+        className="edit-item-title"
+        initialValue={data.title}
+        onChange={handleChange}
+        colorShouldChange={true}
+      />
+      <ResizeTextArea
+        id="description"
+        className={"edit-item-text-area"}
+        initialValue={data.description}
+        onChange={handleChange}
+        colorShouldChange={true}
+      />
       {openTime && (
         <div className="list-item-time">
           <p>
@@ -54,17 +43,12 @@ const ListItem = ({ data, editItem, deleteItem }) => {
           alt="time"
           onClick={() => setOpenTime(!openTime)}
         />
+
         <img
           className="icon"
           src="/icons/icons8-delete-30.png"
           alt="delete"
           onClick={() => deleteItem(data.id)}
-        />
-        <img
-          className="icon"
-          src="/icons/icons8-edit-50.png"
-          alt="edit"
-          onClick={() => setOpenEdit(!openEdit)}
         />
       </span>
     </div>

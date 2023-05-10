@@ -1,8 +1,11 @@
 import React from "react";
 import "./App.css";
 import { v4 as uuidv4 } from "uuid";
+
+// Hooks
 import usePersistState from "./hooks/usePersistState";
 import useWindowSize from "./hooks/useWindowSize";
+import useScroll from "./hooks/useScroll";
 
 // List
 import List from "./components/List";
@@ -10,6 +13,8 @@ import List from "./components/List";
 const App = () => {
   const [state, setState] = usePersistState("lists", []);
   const { width } = useWindowSize();
+
+  const { scrollLeft, scrollRight } = useScroll();
 
   const createList = () => {
     setState([...state, { id: uuidv4(), title: "new title", items: [] }]);
@@ -28,10 +33,6 @@ const App = () => {
     });
     setState(updatedList);
   };
-
-  const scrollLeft = () => (document.getElementById("board").scrollLeft -= 300);
-  const scrollRight = () =>
-    (document.getElementById("board").scrollLeft += 300);
 
   return (
     <main>

@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ListItem from "./ListItem";
 import { v4 as uuidv4 } from "uuid";
 import handleKeyUp from "../utils/handleKeyUp";
 import moment from "moment";
 import ListMenu from "./ListMenu";
+import ResizeTextArea from "./ResizeTextArea";
 
 const initialItemState = {
   id: null,
@@ -15,40 +16,33 @@ const initialItemState = {
 
 const List = ({ state, setState, deleteList, isFocused }) => {
   const [item, setItem] = useState(initialItemState);
+  const titleRef = useRef(null);
 
+  // Focus on the new item description for the first list on the page
   useEffect(() => {
-    if (isFocused) {
-      let input = document.getElementById("new-item-title");
-      input.focus();
+    if (isFocused && titleRef.current) {
+      titleRef.focus();
     }
-  }, []);
+  }, [titleRef.current]);
 
+  // Change the list title
   const handleTitleChange = (e) => {
     setState({ ...state, title: e.target.value });
   };
 
-  const handleChange = (e) => {
-    if (e.target.id === "new-item-description") {
-      if (e.target.value.length <= 140) {
-        setItem({
-          ...item,
-          description: e.target.value,
-        });
-      }
-    } else if (e.target.id === "new-item-title") {
-      setItem({
-        ...item,
-        title: e.target.value,
-      });
-    }
+  // Make a change to the new item
+  const handleChange = (id, text) => {
+    setItem({ ...item, [id]: text });
   };
 
+  // Submit new item to the list
   const createItem = (e) => {
     e.preventDefault();
     setState({ ...state, items: [...state.items, { ...item, id: uuidv4() }] });
     setItem(initialItemState);
   };
 
+  // Function passed to the item for making changes after item creation
   const editItem = ({ id, title, description }) => {
     let updatedItems = state.items.map((item) => {
       if (item.id === id) {
@@ -83,46 +77,44 @@ const List = ({ state, setState, deleteList, isFocused }) => {
           onChange={handleTitleChange}
           onKeyUp={handleKeyUp}
         />
-        <ListMenu sort={sortItems} />
+        <ListMenu sort={sortItems} deleteList={() => deleteList(state.id)} />
       </span>
 
       <div className="list-items">
-        {state.items.length > 0
-          ? state.items.map((item) => (
-              <ListItem
-                key={item.id}
-                data={item}
-                editItem={editItem}
-                deleteItem={deleteItem}
-              />
-            ))
-          : null}
+        {state.items.length > 0 &&
+          state.items.map((item) => (
+            <ListItem
+              key={item.id}
+              data={item}
+              editItem={editItem}
+              deleteItem={deleteItem}
+            />
+          ))}
       </div>
 
       <div className="list-add-item">
-        <div>
-          <input
-            id="new-item-title"
-            className="edit-item-title"
-            value={item.title}
-            onChange={handleChange}
-            onKeyUp={handleKeyUp}
-          />
-        </div>
-        <textarea
-          id="new-item-description"
-          className="list-item-text-area"
-          value={item.description}
+        <ResizeTextArea
+          id="title"
+          className="edit-item-title"
+          initialValue={item.title}
           onChange={handleChange}
-          onKeyUp={handleKeyUp}
+        />
+        <ResizeTextArea
+          id="description"
+          className="list-item-text-area"
+          initialValue={item.description}
+          onChange={handleChange}
+          shouldFocus={isFocused}
+          onSubmit={createItem}
         />
         <span className="list-add-item-footer">
-          <img
-            className="icon"
-            src="/icons/icons8-add-50-dark-blue.png"
-            alt="delete"
-            onClick={createItem}
-          />
+          <button onClick={createItem}>
+            <img
+              className="icon"
+              src="/icons/icons8-add-50-dark-blue.png"
+              alt="delete"
+            />
+          </button>
           <p className="char-length">{item.description.length}</p>
         </span>
       </div>
