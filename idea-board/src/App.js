@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./App.css";
 import { v4 as uuidv4 } from "uuid";
 import usePersistState from "./hooks/usePersistState";
@@ -9,7 +9,7 @@ import List from "./components/List";
 
 const App = () => {
   const [state, setState] = usePersistState("lists", []);
-  const { width, height } = useWindowSize();
+  const { width } = useWindowSize();
 
   const createList = () => {
     setState([...state, { id: uuidv4(), title: "new title", items: [] }]);

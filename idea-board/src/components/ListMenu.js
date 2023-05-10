@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import useHover from "../hooks/useHover";
 
 const ListMenu = ({ sort }) => {
   const [dateAsc, setDateAsc] = useState(false);
