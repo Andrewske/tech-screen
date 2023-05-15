@@ -115,7 +115,7 @@ const List = ({ state, setState, deleteList, isFocused }) => {
             <img
               className="icon"
               src="/icons/icons8-add-50-dark-blue.png"
-              alt="delete"
+              alt="add-icon"
             />
           </button>
           <p className="char-length">{item.description.length}</p>

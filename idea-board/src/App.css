@@ -24,12 +24,6 @@ input[type="reset"] {
 }
 
 main {
-  background: var(--dark-bg);
-  color: --var(--white);
-  height: 100vh;
-  width: 100vw;
-  overflow-x: hidden;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -58,40 +52,6 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.todo-item {
-  height: 350px;
-  width: 300px;
-  background-color: darkgrey;
-  border: 1px solid white;
-  border-radius: 1rem;
-  padding: 1rem;
-  position: relative;
-
-  .title {
-    position: absolute;
-    height: 3rem;
-    top: 0;
-    left: 0;
-    right: 0;
-    border-bottom: 1px solid white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .todo-item-body {
-    margin-top: 3rem;
-    height: 100%;
-
-    .todo-item-textarea {
-      height: 250px;
-      width: 100%;
-      padding: 0;
-    }
-  }
 }
 
 textarea,
